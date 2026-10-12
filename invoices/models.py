@@ -7,6 +7,9 @@ class Invoice(models.Model):
     STATUS_CHOICES = [
         ("draft", "Draft"),
         ("finalized", "Finalized"),
+        ("partially_paid", "Partially Paid"),
+        ("paid", "Paid"),
+        ("cancelled", "Cancelled"),
     ]
 
     owner = models.ForeignKey(

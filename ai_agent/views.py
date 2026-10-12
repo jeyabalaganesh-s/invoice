@@ -196,6 +196,8 @@ def create_empty_draft(user):
         "invoice_date": "",
         "due_date": "",
         "gst_type": "",
+        "gst_applicable": None,
+        "gst_rate": None,
         "discount": 0,
         "template": "",
         "notes": "",
@@ -249,10 +251,26 @@ Return valid JSON only using this structure:
 
 Rules:
 
-- If the customer address explicitly contains a recognizable Indian state,
-  extract that state into customer_state.
-- For example, "204, Kerala" means customer_state is "Kerala".
-- If the user describes one product without specifying quantity,
+- Always collect the invoice due date before marking the invoice ready.
+- If the due date is missing, ask the user when payment is due.
+- Accept explicit dates and relative dates such as "tomorrow"
+  or "in 15 days".
+- Convert relative dates using the supplied current date.
+- Never invent a due date.
+
+- Collect the GST rate separately for every invoice item.
+- Never invent or assume an item's GST rate.
+- If an item's tax_rate is missing, ask the user for that item's GST rate.
+- If the user says no GST applies to the invoice, set every item's
+  tax_rate to 0 and do not ask for individual rates.
+- If GST applies, allow different items to have different tax rates.
+- If the user says all items use the same GST rate, apply that rate
+  to every item unless the user specifies an exception.
+- Preserve previously collected item tax rates unless the user
+  explicitly changes them.
+- Do not ask the user for GST type. The server determines the
+  intra-state or inter-state treatment.
+- If the user describes one product without specifying quantity,x
   use quantity 1.
 - Example: "Software for 5000" means description "Software",
   quantity 1, and unit_price 5000.
@@ -356,6 +374,7 @@ def merge_invoice_data(previous, incoming):
 # MISSING FIELDS
 # --------------------------------------------------
 
+
 def find_missing_fields(data, require_customer_address=True):
     missing = []
 
@@ -368,6 +387,7 @@ def find_missing_fields(data, require_customer_address=True):
         ("customer_mobile", "customer mobile number"),
         ("customer_state", "customer state"),
         ("invoice_date", "invoice date"),
+        ("due_date", "due date"),
     ]
 
     if require_customer_address:
@@ -384,7 +404,7 @@ def find_missing_fields(data, require_customer_address=True):
     if mobile and len(mobile) != 10:
         missing.append("valid 10-digit customer mobile number")
 
-    # GST is automatic and is not requested from the user.
+    # GST type is calculated by the server.
     if (
         str(data.get("customer_state") or "").strip()
         and not data.get("gst_type")
@@ -397,6 +417,7 @@ def find_missing_fields(data, require_customer_address=True):
         missing.append("at least one product or service")
         return missing
 
+    # Validate each product independently.
     for index, item in enumerate(items, start=1):
         if not isinstance(item, dict):
             missing.append(f"item {index} description")
@@ -410,6 +431,23 @@ def find_missing_fields(data, require_customer_address=True):
 
         if item.get("unit_price") in (None, ""):
             missing.append(f"item {index} price")
+
+        tax_rate = item.get("tax_rate")
+
+        if tax_rate in (None, ""):
+            missing.append(f"item {index} tax rate")
+        else:
+            try:
+                rate = float(tax_rate)
+
+                if not 0 <= rate <= 100:
+                    missing.append(
+                        f"item {index} valid tax rate"
+                    )
+            except (TypeError, ValueError):
+                missing.append(
+                    f"item {index} valid tax rate"
+                )
 
     return missing
 
@@ -434,6 +472,7 @@ def build_missing_question(missing):
             "valid seller and customer state details",
         "at least one product or service":
             "at least one product or service",
+        "due date": "invoice due date",
     }
 
     readable = []
@@ -448,6 +487,12 @@ def build_missing_question(missing):
                 field + " (a single item can have quantity 1)"
             )
         elif field.endswith(" price"):
+            readable.append(field)
+        elif field.endswith(" tax rate"):
+            readable.append(
+                f"{field} (enter a percentage, or 0 if no GST applies)"
+            )
+        elif field.endswith(" valid tax rate"):
             readable.append(field)
 
     return (

@@ -855,23 +855,31 @@
                                             {{ invoice.customer_name }}
                                         </td>
 
-                                        <td>
-                                            {% if invoice.status == "paid" %}
-                                                <span class="status status-paid">
-                                                    {{ invoice.get_status_display }}
-                                                </span>
+                                    
+<td>
+    <form
+        method="post"
+        action="{% url 'update_invoice_status' invoice.id %}"
+        class="status-form"
+    >
+        {% csrf_token %}
 
-                                            {% elif invoice.status == "pending" %}
-                                                <span class="status status-pending">
-                                                    {{ invoice.get_status_display }}
-                                                </span>
+        <select name="status" onchange="this.form.submit()">
+            {% for value, label in invoice.STATUS_CHOICES %}
+                <option
+                    value="{{ value }}"
+                    {% if invoice.status == value %}selected{% endif %}
+                >
+                    {{ label }}
+                </option>
+            {% endfor %}
+        </select>
 
-                                            {% else %}
-                                                <span class="status status-other">
-                                                    {{ invoice.get_status_display }}
-                                                </span>
-                                            {% endif %}
-                                        </td>
+        <noscript>
+            <button type="submit">Update</button>
+        </noscript>
+    </form>
+</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>

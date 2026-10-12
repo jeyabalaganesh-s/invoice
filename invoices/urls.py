@@ -17,4 +17,9 @@ urlpatterns = [
     views.edit_invoice,
     name="edit_invoice",
 ),
+path(
+    "invoice/<int:invoice_id>/status/",
+    views.update_invoice_status,
+    name="update_invoice_status",
+),
 ]

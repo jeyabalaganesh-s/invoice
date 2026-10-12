@@ -3,6 +3,13 @@ from decimal import Decimal, InvalidOperation
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect
+from django.views.decorators.http import require_POST
+
+from .models import Invoice
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -378,6 +385,8 @@ def create_invoice(request):
             "invoice_form": form,
             "item_formset": item_formset,
             "selected_template": selected_template,
+            "editing_invoice": None,
+            "invoice": invoice,
         },
     )
 
@@ -1414,3 +1423,30 @@ def edit_invoice(request, invoice_id):
             "editing_invoice": True,
         },
     )
+@login_required
+@require_POST
+def update_invoice_status(request, invoice_id):
+    invoice = get_object_or_404(
+        Invoice,
+        id=invoice_id,
+        owner=request.user,
+    )
+
+    new_status = request.POST.get("status", "")
+
+    valid_statuses = dict(Invoice.STATUS_CHOICES)
+
+    if new_status not in valid_statuses:
+        messages.error(request, "Invalid invoice status.")
+        return redirect("dashboard")
+
+    invoice.status = new_status
+    invoice.save(update_fields=["status"])
+
+    messages.success(
+        request,
+        f"Invoice {invoice.invoice_number} status updated "
+        f"to {invoice.get_status_display()}.",
+    )
+
+    return redirect("dashboard")
