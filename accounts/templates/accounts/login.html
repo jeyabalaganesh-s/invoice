@@ -1,0 +1,541 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login | InvoiceAI</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #5145e5;
+            --primary-dark: #4035c8;
+            --navy: #111827;
+            --muted: #788398;
+            --border: #e4e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: "DM Sans", sans-serif;
+            color: #182033;
+            background: #f5f6fb;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            height: 76px;
+            padding: 0 7%;
+            background: var(--navy);
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 13px;
+            background: linear-gradient(135deg, #8178ff, #4f46e5);
+            display: grid;
+            place-items: center;
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .brand-name {
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .brand-subtitle {
+            color: #9ca7ba;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            margin-top: 4px;
+        }
+
+        .main {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            max-width: 1200px;
+            width: 100%;
+            margin: auto;
+            padding: 55px 35px;
+            gap: 65px;
+            align-items: center;
+        }
+
+        .intro {
+            padding: 15px;
+            animation: fadeUp .6s ease both;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 22px;
+        }
+
+        .eyebrow span {
+            width: 22px;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .intro h1 {
+            font-size: clamp(34px, 4vw, 49px);
+            line-height: 1.15;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+        }
+
+        .intro h1 strong {
+            color: var(--primary);
+        }
+
+        .intro-text {
+            max-width: 440px;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.9;
+        }
+
+        .features {
+            margin-top: 35px;
+            display: grid;
+            gap: 20px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .feature-icon {
+            width: 43px;
+            height: 43px;
+            border-radius: 12px;
+            background: #e9e8ff;
+            color: var(--primary);
+            display: grid;
+            place-items: center;
+            font-size: 19px;
+            flex-shrink: 0;
+        }
+
+        .feature h3 {
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .feature p {
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .login-card {
+            background: white;
+            padding: 38px;
+            border: 1px solid #e8ebf2;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(20, 31, 58, .07);
+            animation: fadeUp .7s ease both;
+        }
+
+        .login-icon {
+            width: 53px;
+            height: 53px;
+            border-radius: 16px;
+            display: grid;
+            place-items: center;
+            background: #eeedff;
+            color: var(--primary);
+            font-size: 24px;
+            margin-bottom: 24px;
+        }
+
+        .login-card h2 {
+            font-size: 25px;
+            letter-spacing: -.8px;
+            margin-bottom: 9px;
+        }
+
+        .login-description {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.7;
+            margin-bottom: 27px;
+        }
+
+        .alert {
+            background: #fff1f2;
+            border: 1px solid #fecdd3;
+            color: #be123c;
+            padding: 12px;
+            border-radius: 9px;
+            font-size: 12px;
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        .alert ul {
+            padding-left: 18px;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #dce1eb;
+            border-radius: 10px;
+            font: inherit;
+            font-size: 13px;
+            color: #182033;
+            outline: none;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        input:focus {
+            border-color: #8178ff;
+            box-shadow: 0 0 0 4px rgba(81, 69, 229, .1);
+        }
+
+        input::placeholder {
+            color: #a1a8b7;
+        }
+
+        .password-wrap {
+            position: relative;
+        }
+
+        .password-wrap input {
+            padding-right: 75px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .toggle-password:hover {
+            background: none;
+        }
+
+        .form-error {
+            color: #dc2626;
+            font-size: 11px;
+            margin-top: 7px;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: var(--primary);
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 7px 16px rgba(81, 69, 229, .2);
+            transition: background .2s, transform .2s;
+        }
+
+        .login-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .register-link {
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 25px;
+        }
+
+        .register-link a {
+            color: var(--primary);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .security-note {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            color: #8993a6;
+            font-size: 10px;
+            margin-top: 25px;
+        }
+
+        .footer {
+            padding: 20px;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 11px;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 800px) {
+            .main {
+                grid-template-columns: 1fr;
+                max-width: 520px;
+                padding: 35px 20px;
+                gap: 30px;
+            }
+
+            .intro {
+                padding: 0;
+            }
+
+            .intro h1 {
+                font-size: 35px;
+            }
+
+            .features {
+                display: none;
+            }
+
+            .login-card {
+                padding: 27px;
+            }
+
+            .navbar {
+                padding: 0 20px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="navbar">
+        <a href="{% url 'login' %}" class="brand">
+            <div class="brand-icon">I</div>
+            <div>
+                <div class="brand-name">InvoiceAI</div>
+                <div class="brand-subtitle">SMART INVOICING</div>
+            </div>
+        </a>
+    </header>
+
+    <main class="main">
+        <section class="intro">
+            <div class="eyebrow"><span></span> Welcome to InvoiceAI</div>
+
+            <h1>Your invoicing.<br>
+                <strong>Made intelligent.</strong>
+            </h1>
+
+            <p class="intro-text">
+                Create professional invoices in minutes. Let your AI assistant
+                organize your details and generate polished PDF invoices
+                without the repetitive work.
+            </p>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">✦</div>
+                    <div>
+                        <h3>AI-powered invoice creation</h3>
+                        <p>Describe your invoice in plain language.</p>
+                    </div>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">▤</div>
+                    <div>
+                        <h3>Four professional designs</h3>
+                        <p>Choose a design that suits your business.</p>
+                    </div>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">↓</div>
+                    <div>
+                        <h3>Download as PDF</h3>
+                        <p>Generate a shareable invoice document.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="login-card">
+            <div class="login-icon">↗</div>
+
+            <h2>Welcome back</h2>
+            <p class="login-description">
+                Sign in to your account to continue to your workspace.
+            </p>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            {% if form.non_field_errors %}
+                <div class="alert">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+
+                {% if next %}
+                    <input type="hidden" name="next" value="{{ next }}">
+                {% endif %}
+
+                <div class="field">
+                    <label for="{{ form.username.id_for_label }}">
+                        Username
+                    </label>
+                    <input
+                        type="text"
+                        name="{{ form.username.html_name }}"
+                        id="{{ form.username.id_for_label }}"
+                        value="{{ form.username.value|default_if_none:'' }}"
+                        placeholder="Enter your username"
+                        autocomplete="username"
+                        required
+                        autofocus
+                    >
+
+                    {% for error in form.username.errors %}
+                        <p class="form-error">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <div class="field">
+                    <label for="{{ form.password.id_for_label }}">
+                        Password
+                    </label>
+
+                    <div class="password-wrap">
+                        <input
+                            type="password"
+                            name="{{ form.password.html_name }}"
+                            id="{{ form.password.id_for_label }}"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+                        <button
+                            class="toggle-password"
+                            type="button"
+                            id="toggle-password"
+                            aria-label="Show password"
+                        >Show</button>
+                    </div>
+
+                    {% for error in form.password.errors %}
+                        <p class="form-error">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <button type="submit" class="login-button">
+                    Sign in to InvoiceAI &nbsp; →
+                </button>
+            </form>
+
+            <div class="register-link">
+                Don't have an account?
+                <a href="{% url 'register' %}">Create account</a>
+            </div>
+
+            <div class="security-note">
+                <span>▣</span>
+                Your account is protected by Django authentication.
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        © 2026 InvoiceAI · Smart invoicing, made simple.
+    </footer>
+
+    <script>
+        const passwordInput = document.getElementById("id_password");
+        const toggleButton = document.getElementById("toggle-password");
+
+        toggleButton.addEventListener("click", function () {
+            const isPassword = passwordInput.type === "password";
+
+            passwordInput.type = isPassword ? "text" : "password";
+            toggleButton.textContent = isPassword ? "Hide" : "Show";
+            toggleButton.setAttribute(
+                "aria-label",
+                isPassword ? "Hide password" : "Show password"
+            );
+        });
+    </script>
+</body>
+</html>

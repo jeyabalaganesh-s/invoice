@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard | AI Invoice Generator</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --background: #f5f7fb;
+            --surface: #ffffff;
+            --text: #172033;
+            --muted: #7b8498;
+            --border: #e8ebf2;
+            --sidebar: #111827;
+            --success-bg: #dcfce7;
+            --success: #15803d;
+            --warning-bg: #fef3c7;
+            --warning: #92400e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        button, a {
+            font: inherit;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: var(--sidebar);
+            color: #fff;
+            padding: 28px 18px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 10px 34px;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 13px;
+            background: linear-gradient(135deg, #6366f1, #4338ca);
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .brand-name {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: -0.4px;
+        }
+
+        .brand-subtitle {
+            color: #9ca3af;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .nav-label {
+            color: #6b7280;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            padding: 0 12px;
+            margin-bottom: 12px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #aeb7c8;
+            padding: 13px 14px;
+            border-radius: 10px;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: 0.2s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: #272f43;
+            color: #fff;
+        }
+
+        .nav-link.active {
+            box-shadow: inset 3px 0 #818cf8;
+        }
+
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+            font-size: 17px;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            padding-top: 28px;
+        }
+
+        .account-card {
+            background: #202a3b;
+            border: 1px solid #303b4e;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 14px;
+        }
+
+        .account-label {
+            color: #9ca3af;
+            font-size: 11px;
+            margin-bottom: 6px;
+        }
+
+        .account-name {
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            overflow-wrap: anywhere;
+        }
+
+        .logout-button {
+            width: 100%;
+            color: #d1d5db;
+            background: transparent;
+            border: 1px solid #374151;
+            padding: 11px;
+            border-radius: 9px;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .logout-button:hover {
+            background: #374151;
+            color: #fff;
+        }
+
+        /* Main content */
+        .main {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .topbar {
+            min-height: 82px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 38px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .breadcrumb {
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        .topbar h1 {
+            font-size: 21px;
+            letter-spacing: -0.7px;
+            font-weight: 700;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: #e0e7ff;
+            color: var(--primary-dark);
+            font-weight: 700;
+        }
+
+        .welcome-name {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .welcome-role {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .content {
+            padding: 34px 38px;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .welcome-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .welcome-section h2 {
+            font-size: 25px;
+            letter-spacing: -0.8px;
+            margin-bottom: 8px;
+        }
+
+        .welcome-section p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .primary-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            padding: 13px 19px;
+            color: #fff;
+            background: var(--primary);
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            box-shadow: 0 5px 12px #4f46e526;
+            transition: 0.2s ease;
+        }
+
+        .primary-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        /* Summary cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 23px;
+            transition: 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px #1720330a;
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .stat-icon {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            font-size: 19px;
+        }
+
+        .icon-purple {
+            color: #6366f1;
+            background: #eef2ff;
+        }
+
+        .icon-green {
+            color: #16a34a;
+            background: #dcfce7;
+        }
+
+        .icon-orange {
+            color: #ea580c;
+            background: #ffedd5;
+        }
+
+        .stat-value {
+            font-size: 29px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .stat-description {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 8px;
+        }
+
+        /* Invoice panel */
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 23px 25px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-header h3 {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .panel-header p {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 6px;
+        }
+
+        .count-badge {
+            background: #eef2ff;
+            color: #4338ca;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 6px 10px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        thead {
+            background: #fafbfe;
+        }
+
+        th {
+            padding: 14px 25px;
+            color: #8991a3;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 700;
+        }
+
+        td {
+            padding: 18px 25px;
+            border-top: 1px solid #f0f2f7;
+            font-size: 12px;
+            color: #4b5563;
+        }
+
+        tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: #fafbff;
+        }
+
+        .invoice-number {
+            font-weight: 700;
+        }
+
+        /* Clickable invoice number */
+        .invoice-link {
+            color: #3730a3;
+            font-weight: 700;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .invoice-link:hover {
+            color: #6366f1;
+            text-decoration: underline;
+        }
+
+        .customer-name {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: 20px;
+            padding: 6px 10px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .status::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            background: currentColor;
+            border-radius: 50%;
+        }
+
+        .status-paid {
+            background: var(--success-bg);
+            color: var(--success);
+        }
+
+        .status-pending {
+            background: var(--warning-bg);
+            color: var(--warning);
+        }
+
+        .status-other {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .page-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 9px 13px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: white;
+            color: var(--text);
+            font-size: 12px;
+            text-decoration: none;
+            transition: 0.2s ease;
+        }
+
+        a.page-btn:hover {
+            background: #eef2ff;
+            border-color: #c7d2fe;
+            color: var(--primary);
+        }
+
+        .page-btn.disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .page-info {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        /* Empty state */
+        .empty-state {
+            padding: 55px 20px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 17px;
+            display: grid;
+            place-items: center;
+            border-radius: 18px;
+            background: #eef2ff;
+            color: var(--primary);
+            font-size: 26px;
+        }
+
+        .empty-state h4 {
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .footer {
+            padding: 24px 0 4px;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 11px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 1000px) {
+            .sidebar {
+                width: 215px;
+            }
+
+            .content {
+                padding: 28px 24px;
+            }
+
+            .topbar {
+                padding: 20px 24px;
+            }
+
+            .stats-grid {
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 18px;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .sidebar {
+                width: 68px;
+                padding: 22px 9px;
+            }
+
+            .brand {
+                justify-content: center;
+                padding: 0 0 32px;
+            }
+
+            .brand-copy,
+            .nav-label,
+            .nav-text,
+            .account-card {
+                display: none;
+            }
+
+            .nav-link {
+                justify-content: center;
+                padding: 13px 0;
+            }
+
+            .nav-icon {
+                font-size: 20px;
+            }
+
+            .logout-button {
+                font-size: 0;
+                padding: 11px 0;
+            }
+
+            .logout-button::after {
+                content: "↪";
+                font-size: 18px;
+            }
+
+            .topbar {
+                padding: 18px;
+            }
+
+            .content {
+                padding: 24px 18px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-section {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .topbar h1 {
+                font-size: 18px;
+            }
+
+            .welcome-section h2 {
+                font-size: 22px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .welcome-role {
+                display: none;
+            }
+
+            .avatar {
+                width: 35px;
+                height: 35px;
+            }
+
+            .panel-header {
+                padding: 18px;
+            }
+
+            th, td {
+                padding: 15px 18px;
+            }
+
+            .pagination {
+                gap: 6px;
+                padding: 15px 8px;
+            }
+
+            .page-btn {
+                padding: 8px 9px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">I</div>
+            <div class="brand-copy">
+                <div class="brand-name">InvoiceAI</div>
+                <div class="brand-subtitle">SMART INVOICING</div>
+            </div>
+        </div>
+
+        <div class="nav-label">WORKSPACE</div>
+
+        <a href="{% url 'dashboard' %}" class="nav-link active">
+            <span class="nav-icon">⌂</span>
+            <span class="nav-text">Dashboard</span>
+        </a>
+
+        <a href="{% url 'template_selection' %}" class="nav-link">
+            <span class="nav-icon">＋</span>
+            <span class="nav-text">Create Invoice</span>
+        </a>
+
+        <div class="sidebar-bottom">
+            <div class="account-card">
+                <div class="account-label">SIGNED IN AS</div>
+                <div class="account-name">{{ request.user.username }}</div>
+            </div>
+
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-button">
+                    ↪ &nbsp; Sign out
+                </button>
+            </form>
+        </div>
+
+    </aside>
+
+    <!-- Main content -->
+    <main class="main">
+
+        <header class="topbar">
+            <div>
+                <div class="breadcrumb">Workspace / Dashboard</div>
+                <h1>Dashboard</h1>
+            </div>
+
+            <div class="topbar-right">
+                <div>
+                    <div class="welcome-name">
+                        {{ request.user.username }}
+                    </div>
+                    <div class="welcome-role">Workspace account</div>
+                </div>
+
+                <div class="avatar">
+                    {{ request.user.username|first|upper }}
+                </div>
+            </div>
+        </header>
+
+        <div class="content">
+
+            <!-- Welcome section -->
+            <section class="welcome-section">
+                <div>
+                    <h2>
+                        Welcome back, {{ request.user.username }} 👋
+                    </h2>
+                    <p>
+                        Manage your invoices and create professional
+                        documents in less time.
+                    </p>
+                </div>
+
+                <a href="{% url 'template_selection' %}"
+                   class="primary-button">
+                    <span>＋</span> Create New Invoice
+                </a>
+            </section>
+
+            <!-- Summary cards -->
+            <section class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <div class="stat-label">Total Invoices</div>
+                        <div class="stat-icon icon-purple">▤</div>
+                    </div>
+
+                    <div class="stat-value">
+                        {{ total_invoices_count|default:0 }}
+                    </div>
+
+                    <div class="stat-description">
+                        All invoices in your account
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <div class="stat-label">Paid Invoices</div>
+                        <div class="stat-icon icon-green">✓</div>
+                    </div>
+
+                    <div class="stat-value">
+                        {{ paid_invoices_count|default:0 }}
+                    </div>
+
+                    <div class="stat-description">
+                        Invoices marked as paid
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <div class="stat-label">Pending Invoices</div>
+                        <div class="stat-icon icon-orange">◷</div>
+                    </div>
+
+                    <div class="stat-value">
+                        {{ pending_invoices_count|default:0 }}
+                    </div>
+
+                    <div class="stat-description">
+                        Invoices awaiting payment
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Recent invoices -->
+            <section class="panel">
+
+                <div class="panel-header">
+                    <div>
+                        <h3>Recent Invoices</h3>
+                        <p>
+                            Click an invoice number to edit its details.
+                        </p>
+                    </div>
+
+                    <span class="count-badge">
+                        {{ total_invoices_count|default:0 }} records
+                    </span>
+                </div>
+
+                {% if invoices %}
+
+                    <!-- Invoice table -->
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Invoice Number</th>
+                                    <th>Customer</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for invoice in invoices %}
+                                    <tr>
+                                        <td class="invoice-number">
+                                            <a
+                                                href="{% url 'edit_invoice' invoice.id %}"
+                                                class="invoice-link"
+                                                title="Edit this invoice"
+                                            >
+                                                {{ invoice.invoice_number }}
+                                            </a>
+                                        </td>
+
+                                        <td class="customer-name">
+                                            {{ invoice.customer_name }}
+                                        </td>
+
+                                        <td>
+                                            {% if invoice.status == "paid" %}
+                                                <span class="status status-paid">
+                                                    {{ invoice.get_status_display }}
+                                                </span>
+
+                                            {% elif invoice.status == "pending" %}
+                                                <span class="status status-pending">
+                                                    {{ invoice.get_status_display }}
+                                                </span>
+
+                                            {% else %}
+                                                <span class="status status-other">
+                                                    {{ invoice.get_status_display }}
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination: outside the table wrapper -->
+                    {% if page_obj.paginator.num_pages > 1 %}
+                        <nav class="pagination"
+                             aria-label="Invoice pagination">
+
+                            {% if page_obj.has_previous %}
+                                <a href="?page=1" class="page-btn">
+                                    First
+                                </a>
+
+                                <a
+                                    href="?page={{ page_obj.previous_page_number }}"
+                                    class="page-btn"
+                                >
+                                    Previous
+                                </a>
+                            {% else %}
+                                <span class="page-btn disabled">
+                                    First
+                                </span>
+
+                                <span class="page-btn disabled">
+                                    Previous
+                                </span>
+                            {% endif %}
+
+                            <span class="page-info">
+                                Page {{ page_obj.number }}
+                                of {{ page_obj.paginator.num_pages }}
+                            </span>
+
+                            {% if page_obj.has_next %}
+                                <a
+                                    href="?page={{ page_obj.next_page_number }}"
+                                    class="page-btn"
+                                >
+                                    Next
+                                </a>
+
+                                <a
+                                    href="?page={{ page_obj.paginator.num_pages }}"
+                                    class="page-btn"
+                                >
+                                    Last
+                                </a>
+                            {% else %}
+                                <span class="page-btn disabled">
+                                    Next
+                                </span>
+
+                                <span class="page-btn disabled">
+                                    Last
+                                </span>
+                            {% endif %}
+
+                        </nav>
+                    {% endif %}
+
+                {% else %}
+
+                    <!-- Empty state -->
+                    <div class="empty-state">
+                        <div class="empty-icon">▤</div>
+
+                        <h4>No invoices yet</h4>
+
+                        <p>
+                            Your invoices will appear here after you create
+                            your first one.
+                            <br>
+                            Start with a template and let AI help fill
+                            in the details.
+                        </p>
+
+                        <a href="{% url 'template_selection' %}"
+                           class="primary-button">
+                            ＋ Create Your First Invoice
+                        </a>
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+            <footer class="footer">
+                AI Invoice Generator · Smart invoicing, made simple.
+            </footer>
+
+        </div>
+    </main>
+</div>
+</body>
+</html>

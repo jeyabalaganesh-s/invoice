@@ -1,0 +1,2018 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Choose Invoice Template | InvoiceAI</title>
+
+
+
+    <link rel="preconnect" href="https\://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https\://fonts.gstatic.com" crossorigin>
+
+    <link href="https\://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+
+
+    <style>
+
+        :root {
+
+            --bg: #f5f6fa;
+
+            --surface: #ffffff;
+
+            --text: #182033;
+
+            --muted: #7b8497;
+
+            --border: #e7eaf1;
+
+            --primary: #5145e5;
+
+            --navy: #101827;
+
+        }
+
+
+
+        * {
+
+            box-sizing: border-box;
+
+            margin: 0;
+
+            padding: 0;
+
+        }
+
+
+
+        body {
+
+            font-family: 'DM Sans', sans-serif;
+
+            background: var(--bg);
+
+            color: var(--text);
+
+            min-height: 100vh;
+
+        }
+
+
+
+        button, a {
+
+            font: inherit;
+
+        }
+
+
+
+        a {
+
+            color: inherit;
+
+            text-decoration: none;
+
+        }
+
+
+
+        /* Navigation */
+
+        .navbar {
+
+            height: 76px;
+
+            padding: 0 6%;
+
+            background: var(--navy);
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+        }
+
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+        }
+
+
+
+        .brand-logo {
+
+            width: 40px;
+
+            height: 40px;
+
+            display: grid;
+
+            place-items: center;
+
+            border-radius: 12px;
+
+            background: linear-gradient(135deg, #7770ff, #4436ce);
+
+            font-size: 21px;
+
+            font-weight: 700;
+
+        }
+
+
+
+        .brand-name {
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            letter-spacing: -0.4px;
+
+        }
+
+
+
+        .brand-caption {
+
+            margin-top: 3px;
+
+            color: #9ca7ba;
+
+            font-size: 10px;
+
+            letter-spacing: 1.5px;
+
+        }
+
+
+
+        .nav-right {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 20px;
+
+            color: #d1d5db;
+
+            font-size: 12px;
+
+        }
+
+
+
+        .back-link {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            transition: color 0.2s;
+
+        }
+
+
+
+        .back-link:hover {
+
+            color: white;
+
+        }
+
+
+
+        .user-avatar {
+
+            width: 36px;
+
+            height: 36px;
+
+            border-radius: 50%;
+
+            display: grid;
+
+            place-items: center;
+
+            background: #293449;
+
+            color: white;
+
+            font-weight: 700;
+
+        }
+
+
+
+        /* Page heading */
+
+        .container {
+
+            width: min(1240px, 100%);
+
+            margin: auto;
+
+            padding: 50px 28px 60px;
+
+        }
+
+
+
+        .heading {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-end;
+
+            gap: 24px;
+
+            margin-bottom: 32px;
+
+        }
+
+
+
+        .eyebrow {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            margin-bottom: 15px;
+
+            color: var(--primary);
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            letter-spacing: 1.7px;
+
+            text-transform: uppercase;
+
+        }
+
+
+
+        .eyebrow::before {
+
+            content: "";
+
+            width: 22px;
+
+            height: 2px;
+
+            background: var(--primary);
+
+        }
+
+
+
+        h1 {
+
+            font-size: clamp(28px, 4vw, 39px);
+
+            letter-spacing: -1.5px;
+
+            line-height: 1.2;
+
+            font-weight: 700;
+
+        }
+
+
+
+        .heading-description {
+
+            max-width: 560px;
+
+            color: var(--muted);
+
+            font-size: 14px;
+
+            line-height: 1.8;
+
+            margin-top: 12px;
+
+        }
+
+
+
+        .template-count {
+
+            flex-shrink: 0;
+
+            padding: 10px 14px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 10px;
+
+            background: white;
+
+            color: #647087;
+
+            font-size: 12px;
+
+        }
+
+
+
+        .template-count strong {
+
+            color: var(--text);
+
+        }
+
+
+
+        /* Template grid */
+
+        .templates {
+
+            display: grid;
+
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+
+            gap: 26px;
+
+        }
+
+
+
+        .card {
+
+            min-width: 0;
+
+            padding: 19px;
+
+            background: var(--surface);
+
+            border: 1px solid var(--border);
+
+            border-radius: 17px;
+
+            box-shadow: 0 3px 10px #15213b05;
+
+            transition: transform 0.25s ease, box-shadow 0.25s ease,
+
+                        border-color 0.25s ease;
+
+        }
+
+
+
+        .card:hover {
+
+            transform: translateY(-5px);
+
+            border-color: #c9c7ff;
+
+            box-shadow: 0 18px 40px #15213b0d;
+
+        }
+
+
+
+        .card-top {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 15px;
+
+        }
+
+
+
+        .template-label {
+
+            color: #707b90;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            letter-spacing: 1.2px;
+
+            text-transform: uppercase;
+
+        }
+
+
+
+        .template-tag {
+
+            padding: 6px 9px;
+
+            border-radius: 7px;
+
+            background: #f1f3f9;
+
+            color: #69738a;
+
+            font-size: 10px;
+
+            font-weight: 600;
+
+        }
+
+
+
+        /* Invoice preview paper */
+
+        .preview {
+
+            position: relative;
+
+            min-height: 300px;
+
+            overflow: hidden;
+
+            padding: 27px 25px;
+
+            margin-bottom: 23px;
+
+            background: #fff;
+
+            border: 1px solid #e9ebf0;
+
+            box-shadow: 0 5px 15px #1b27400a;
+
+            transition: box-shadow 0.25s ease;
+
+        }
+
+
+
+        .card:hover .preview {
+
+            box-shadow: 0 9px 24px #1b274012;
+
+        }
+
+
+
+        .preview-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-start;
+
+            gap: 15px;
+
+        }
+
+
+
+        .preview h3 {
+
+            font-size: 21px;
+
+            letter-spacing: -0.6px;
+
+        }
+
+
+
+        .preview p {
+
+            font-size: 10px;
+
+            line-height: 1.7;
+
+        }
+
+
+
+        .preview .muted {
+
+            color: #8992a3;
+
+        }
+
+
+
+        .preview .business {
+
+            margin-top: 7px;
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            letter-spacing: 1px;
+
+        }
+
+
+
+        .invoice-mark {
+
+            width: 34px;
+
+            height: 34px;
+
+            display: grid;
+
+            place-items: center;
+
+            border-radius: 9px;
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+        }
+
+
+
+        .preview-meta {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 12px;
+
+            margin: 25px 0 16px;
+
+            padding: 13px 0;
+
+            border-top: 1px solid #e8eaf0;
+
+            border-bottom: 1px solid #e8eaf0;
+
+        }
+
+
+
+        .meta-label {
+
+            display: block;
+
+            color: #939bad;
+
+            font-size: 8px;
+
+            letter-spacing: 0.8px;
+
+            margin-bottom: 5px;
+
+        }
+
+
+
+        .meta-value {
+
+            font-size: 10px;
+
+            font-weight: 600;
+
+        }
+
+
+
+        .preview table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            font-size: 10px;
+
+        }
+
+
+
+        .preview th {
+
+            padding: 10px 7px;
+
+            text-align: left;
+
+            font-size: 8px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.5px;
+
+        }
+
+
+
+        .preview td {
+
+            padding: 12px 7px;
+
+            border-bottom: 1px solid #edf0f5;
+
+            color: #5c6578;
+
+        }
+
+
+
+        .preview th:last-child,
+
+        .preview td:last-child {
+
+            text-align: right;
+
+        }
+
+
+
+        .preview-total {
+
+            display: flex;
+
+            justify-content: flex-end;
+
+            align-items: center;
+
+            gap: 16px;
+
+            margin-top: 18px;
+
+        }
+
+
+
+        .preview-total span {
+
+            font-size: 10px;
+
+        }
+
+
+
+        .preview-total strong {
+
+            font-size: 15px;
+
+        }
+
+
+
+        .preview-footer {
+
+            margin-top: 22px;
+
+            padding-top: 12px;
+
+            border-top: 1px solid #edf0f5;
+
+            color: #929bad;
+
+            font-size: 8px;
+
+        }
+
+
+
+        /* 1. Classic Professional */
+
+        .classic {
+
+            border-top: 5px solid #263d67;
+
+        }
+
+
+
+        .classic .invoice-mark {
+
+            color: #263d67;
+
+            background: #edf1f8;
+
+        }
+
+
+
+        .classic .preview-total strong {
+
+            color: #263d67;
+
+        }
+
+
+
+        .classic th {
+
+            background: #f2f4f8;
+
+            color: #344563;
+
+        }
+
+
+
+        /* 2. Luxury */
+
+        .luxury {
+
+            border-top: 5px solid #b69b58;
+
+            font-family: Georgia, serif;
+
+        }
+
+
+
+        .luxury .preview-header {
+
+            text-align: center;
+
+            display: block;
+
+        }
+
+
+
+        .luxury .preview-header h3 {
+
+            font-size: 23px;
+
+            letter-spacing: 4px;
+
+            font-weight: 500;
+
+        }
+
+
+
+        .luxury .invoice-mark {
+
+            display: none;
+
+        }
+
+
+
+        .luxury .business {
+
+            color: #a68a48;
+
+        }
+
+
+
+        .luxury .preview-meta {
+
+            border-color: #e6ddc6;
+
+        }
+
+
+
+        .luxury th {
+
+            background: #f8f5ec;
+
+            color: #8e753d;
+
+        }
+
+
+
+        .luxury .preview-total strong {
+
+            color: #a68a48;
+
+        }
+
+
+
+        .luxury .preview-total {
+
+            padding-top: 13px;
+
+            border-top: 1px solid #d8c99e;
+
+        }
+
+
+
+        /* 3. Modern Corporate */
+
+        .corporate {
+
+            border-top: 5px solid #0d9488;
+
+        }
+
+
+
+        .corporate .invoice-mark {
+
+            color: #0d9488;
+
+            background: #e0f7f4;
+
+        }
+
+
+
+        .corporate .preview-meta {
+
+            background: #f5fbfa;
+
+            padding: 13px 10px;
+
+        }
+
+
+
+        .corporate th {
+
+            background: #e5f5f2;
+
+            color: #08766d;
+
+        }
+
+
+
+        .corporate .preview-total strong {
+
+            color: #08766d;
+
+        }
+
+
+
+        /* 4. Creative Freelancer */
+
+        .creative {
+
+            border-top: 5px solid #8b5cf6;
+
+            background:
+
+                radial-gradient(circle at 100% 0%, #f1eaff 0, transparent 33%),
+
+                #fff;
+
+        }
+
+
+
+        .creative .preview-header h3 {
+
+            max-width: 190px;
+
+            color: #7c3aed;
+
+            font-size: 24px;
+
+            line-height: 1.25;
+
+        }
+
+
+
+        .creative .invoice-mark {
+
+            color: white;
+
+            background: linear-gradient(135deg, #a78bfa, #7c3aed);
+
+        }
+
+
+
+        .creative .business {
+
+            color: #8b5cf6;
+
+        }
+
+
+
+        .creative .preview-meta {
+
+            border-top: 1px dashed #d8c9ff;
+
+            border-bottom: 1px dashed #d8c9ff;
+
+        }
+
+
+
+        .creative th {
+
+            background: #f3edff;
+
+            color: #7c3aed;
+
+        }
+
+
+
+        .creative .preview-total strong {
+
+            color: #7c3aed;
+
+        }
+
+
+
+        /* Card information */
+
+        .card-info {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            justify-content: space-between;
+
+            gap: 12px;
+
+            margin-bottom: 9px;
+
+        }
+
+
+
+        .card-info h2 {
+
+            font-size: 17px;
+
+            letter-spacing: -0.4px;
+
+            line-height: 1.5;
+
+        }
+
+
+
+        .number {
+
+            color: #a1a8b7;
+
+            margin-right: 5px;
+
+        }
+
+
+
+        .description {
+
+            min-height: 38px;
+
+            color: var(--muted);
+
+            font-size: 12px;
+
+            line-height: 1.7;
+
+            margin-bottom: 19px;
+
+        }
+
+
+
+        .use-button {
+
+            width: 100%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 10px;
+
+            padding: 13px 16px;
+
+            border: 1px solid #e3e6ef;
+
+            border-radius: 10px;
+
+            background: white;
+
+            color: #29334a;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: all 0.2s ease;
+
+        }
+
+
+
+        .use-button .arrow {
+
+            font-size: 16px;
+
+            transition: transform 0.2s ease;
+
+        }
+
+
+
+        .use-button:hover {
+
+            background: var(--primary);
+
+            color: white;
+
+            border-color: var(--primary);
+
+        }
+
+
+
+        .use-button:hover .arrow {
+
+            transform: translateX(4px);
+
+        }
+
+
+
+        .bottom-note {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 10px;
+
+            margin-top: 30px;
+
+            color: #788398;
+
+            font-size: 11px;
+
+            text-align: center;
+
+        }
+
+
+
+        .bottom-note span {
+
+            color: #16a34a;
+
+        }
+
+
+
+        @media (max-width: 760px) {
+
+            .navbar {
+
+                height: 68px;
+
+                padding: 0 20px;
+
+            }
+
+
+
+            .container {
+
+                padding: 35px 18px 45px;
+
+            }
+
+
+
+            .heading {
+
+                align-items: flex-start;
+
+                flex-direction: column;
+
+                gap: 18px;
+
+            }
+
+
+
+            .templates {
+
+                grid-template-columns: 1fr;
+
+                gap: 18px;
+
+            }
+
+
+
+            .preview {
+
+                min-height: 280px;
+
+            }
+
+
+
+            .nav-right .back-text {
+
+                display: none;
+
+            }
+
+        }
+
+
+
+        @media (max-width: 390px) {
+
+            .card {
+
+                padding: 13px;
+
+            }
+
+
+
+            .preview {
+
+                padding: 21px 15px;
+
+            }
+
+
+
+            .brand-name {
+
+                font-size: 14px;
+
+            }
+
+
+
+            .template-count {
+
+                font-size: 11px;
+
+            }
+
+        }
+
+
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *, *::before, *::after {
+
+                transition-duration: 0.01ms !important;
+
+                animation-duration: 0.01ms !important;
+
+            }
+
+        }
+
+    
+
+        /* -------------------------------------------------------
+           InvoiceAI premium refresh — visual polish layer
+           Keeps the existing template markup and Django routes.
+        -------------------------------------------------------- */
+        :root {
+            --bg: #f3f5fb;
+            --surface: #ffffff;
+            --text: #172033;
+            --muted: #758099;
+            --border: #e5e9f3;
+            --primary: #5947f5;
+            --navy: #101727;
+            --shadow-card: 0 14px 38px rgba(22, 31, 56, .055);
+        }
+
+        body {
+            background:
+                radial-gradient(ellipse at 12% 0%, rgba(100, 91, 255, .10), transparent 30%),
+                radial-gradient(ellipse at 100% 20%, rgba(34, 197, 181, .07), transparent 28%),
+                var(--bg);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            height: 74px;
+            padding-inline: max(24px, calc((100vw - 1240px) / 2));
+            background: rgba(16, 24, 39, .96);
+            border-bottom: 1px solid rgba(255,255,255,.08);
+            box-shadow: 0 8px 28px rgba(10, 16, 31, .12);
+            backdrop-filter: blur(16px);
+        }
+
+        .brand-logo {
+            border-radius: 14px;
+            box-shadow: 0 7px 18px rgba(89, 71, 245, .32), inset 0 1px 0 rgba(255,255,255,.3);
+        }
+
+        .brand-name { font-size: 17px; letter-spacing: -.55px; }
+        .brand-caption { font-size: 9px; letter-spacing: 1.8px; }
+        .back-link { padding: 10px 13px; border: 1px solid rgba(255,255,255,.12); border-radius: 10px; }
+        .back-link:hover { background: rgba(255,255,255,.08); }
+        .user-avatar { border: 2px solid rgba(255,255,255,.15); box-shadow: 0 0 0 4px rgba(255,255,255,.035); }
+
+        .container { padding-top: 58px; }
+        .heading { margin-bottom: 36px; align-items: center; }
+        .eyebrow {
+            padding: 8px 12px;
+            margin-bottom: 16px;
+            border: 1px solid #e3e0ff;
+            border-radius: 999px;
+            background: rgba(255,255,255,.78);
+            font-size: 10px;
+            letter-spacing: 1.4px;
+        }
+        .eyebrow::before { width: 7px; height: 7px; border-radius: 50%; }
+        h1 { max-width: 680px; font-size: clamp(32px, 4vw, 46px); letter-spacing: -1.9px; line-height: 1.12; }
+        .heading-description { max-width: 610px; font-size: 14px; line-height: 1.85; }
+        .template-count {
+            padding: 13px 17px;
+            border-radius: 13px;
+            box-shadow: 0 5px 18px rgba(22,31,56,.04);
+        }
+        .template-count strong { color: var(--primary); font-size: 16px; }
+
+        .templates { gap: 24px; }
+        .card {
+            padding: 20px;
+            border-radius: 21px;
+            box-shadow: var(--shadow-card);
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto;
+            height: 3px;
+            opacity: .0;
+            background: linear-gradient(90deg, #5947f5, #20b8aa, #a78bfa);
+            transition: opacity .25s ease;
+        }
+        .card:hover { transform: translateY(-6px); border-color: #d7d3ff; box-shadow: 0 22px 52px rgba(35, 39, 83, .11); }
+        .card:hover::before { opacity: 1; }
+        .card-top { margin-bottom: 17px; }
+        .template-label { letter-spacing: 1.35px; }
+        .template-tag { border: 1px solid #e9ebf4; border-radius: 999px; padding: 6px 10px; }
+
+        .preview {
+            min-height: 310px;
+            padding: 27px 25px;
+            margin-bottom: 22px;
+            border: 1px solid rgba(226,230,240,.95);
+            border-radius: 13px;
+            box-shadow: 0 8px 20px rgba(21, 31, 57, .045);
+        }
+        .preview-header { gap: 18px; }
+        .preview h3 { font-size: 22px; }
+        .preview-meta { margin-top: 23px; padding: 14px 0; }
+        .preview th { padding: 11px 8px; }
+        .preview td { padding: 12px 8px; }
+        .preview-total { margin-top: 20px; }
+        .preview-total strong { font-size: 16px; letter-spacing: -.3px; }
+        .preview-footer { margin-top: 24px; padding-top: 13px; }
+
+        .classic { border-top: 5px solid #263d67; }
+        .classic .preview-total { padding: 12px 13px; border-radius: 8px; background: #f2f5fb; }
+        .classic .preview-footer { border-top-style: solid; }
+
+        .luxury { border-top: 5px solid #b69b58; background: linear-gradient(180deg, #fffefa, #fff); }
+        .luxury .preview-header h3 { font-size: 24px; letter-spacing: 4.5px; }
+        .luxury .preview-meta { justify-content: space-around; border-top: 1px solid #e8dec7; border-bottom: 1px solid #e8dec7; }
+        .luxury th { background: #f7f2e6; }
+        .luxury .preview-total { padding: 13px 14px; background: #faf6ed; border: 1px solid #eee3c8; }
+        .luxury .preview-footer { border-top: 1px solid #e6d8b4; font-style: italic; }
+
+        .corporate { border-top: 5px solid #0d9488; background: linear-gradient(180deg, #fbfffe, #fff 46%); }
+        .corporate .preview-header { margin: -27px -25px 0; padding: 22px 25px; background: #087e78; color: #fff; }
+        .corporate .preview-header h3, .corporate .preview-header .business { color: #fff; }
+        .corporate .preview-header .muted { color: #c9f5ee; }
+        .corporate .invoice-mark { background: rgba(255,255,255,.14); color: white; border: 1px solid rgba(255,255,255,.2); }
+        .corporate .preview-meta { background: #effaf8; border: 1px solid #d6eee9; border-radius: 9px; padding: 13px 10px; }
+        .corporate th { background: #0f766e; color: #fff; }
+        .corporate .preview-total { padding: 13px 14px; background: #e8f7f4; border-left: 3px solid #0d9488; border-radius: 4px 9px 9px 4px; }
+        .corporate .preview-footer { border-top: 1px solid #cce9e4; }
+
+        .creative { border: 1px solid #e5d8ff; border-top: 5px solid #8b5cf6; border-radius: 13px; background: radial-gradient(circle at 100% 0%, #f0e8ff 0, transparent 37%), #fff; }
+        .creative .preview-header { margin: -27px -25px 0; padding: 22px 25px; background: linear-gradient(125deg, #4c1d95, #7c3aed 68%, #a78bfa); color: white; }
+        .creative .preview-header h3, .creative .preview-header .business { color: white; }
+        .creative .preview-header .muted { color: #e9ddff; }
+        .creative .invoice-mark { color: white; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.24); }
+        .creative .preview-meta { border: 1px dashed #d8c9ff; border-left: 0; border-right: 0; }
+        .creative th { background: #f3edff; color: #6d28d9; }
+        .creative .preview-total { padding: 13px 14px; border-radius: 9px; background: #f4edff; border: 1px solid #e3d5ff; }
+        .creative .preview-footer { border-top: 1px dashed #d8c9ff; }
+
+        .card-info { margin-bottom: 8px; }
+        .card-info h2 { font-size: 18px; letter-spacing: -.55px; }
+        .number { color: var(--primary); font-weight: 700; }
+        .description { min-height: 42px; font-size: 12.5px; line-height: 1.75; }
+        .use-button {
+            padding: 14px 16px;
+            border-radius: 11px;
+            border-color: #e1e5f0;
+            box-shadow: 0 3px 8px rgba(20, 30, 55, .025);
+        }
+        .use-button:hover { box-shadow: 0 8px 18px rgba(89, 71, 245, .22); }
+        .use-button:focus-visible, .back-link:focus-visible { outline: 3px solid #aaa3ff; outline-offset: 3px; }
+        .bottom-note { margin-top: 34px; padding: 14px 18px; border: 1px solid #e5e9f3; border-radius: 12px; background: rgba(255,255,255,.72); }
+        .bottom-note span { display: grid; place-items: center; width: 21px; height: 21px; border-radius: 50%; background: #dcfce7; }
+
+        @media (max-width: 760px) {
+            .navbar { position: relative; }
+            .container { padding-top: 34px; }
+            .heading { margin-bottom: 25px; }
+            .templates { gap: 18px; }
+            .card { padding: 15px; border-radius: 17px; }
+            .preview { min-height: 280px; padding: 22px 18px; }
+            .corporate .preview-header, .creative .preview-header { margin: -22px -18px 0; padding: 20px 18px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+        }
+
+
+
+        /* Compact layout refinements */
+        .navbar { height: 64px; padding: 0 5%; }
+        .brand-logo { width: 34px; height: 34px; border-radius: 10px; font-size: 18px; }
+        .container { width: min(1080px, 100%); padding: 34px 24px 42px; }
+        .heading { margin-bottom: 23px; }
+        .eyebrow { margin-bottom: 9px; font-size: 10px; }
+        h1 { font-size: clamp(25px, 3vw, 32px); letter-spacing: -1px; }
+        .heading-description { margin-top: 8px; font-size: 12px; line-height: 1.65; max-width: 500px; }
+        .template-count { padding: 8px 11px; font-size: 11px; }
+        .templates { gap: 18px; }
+        .card { padding: 15px; border-radius: 14px; }
+        .card-top { margin-bottom: 11px; }
+        .preview { min-height: 250px; padding: 21px 20px; margin-bottom: 17px; }
+        .preview h3 { font-size: 18px; }
+        .preview-meta { margin: 18px 0 12px; padding: 10px 0; }
+        .preview th { padding: 8px 6px; }
+        .preview td { padding: 9px 6px; }
+        .preview-total { margin-top: 13px; }
+        .preview-total strong { font-size: 13px; }
+        .preview-footer { margin-top: 16px; padding-top: 9px; }
+        .card-info h2 { font-size: 15px; }
+        .description { min-height: 32px; font-size: 11px; margin-bottom: 13px; }
+        .use-button { padding: 10px 13px; font-size: 11px; }
+        .bottom-note { margin-top: 22px; font-size: 10px; }
+        @media (min-width: 1100px) {
+            .templates { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (max-width: 760px) {
+            .container { padding: 28px 16px 34px; }
+            .preview { min-height: 240px; }
+        }
+
+    </style>
+
+</head>
+
+
+
+<body>
+
+
+
+<nav class="navbar">
+
+    <a href="{% url 'dashboard' %}" class="brand">
+
+        <div class="brand-logo">I</div>
+
+        <div>
+
+            <div class="brand-name">InvoiceAI</div>
+
+            <div class="brand-caption">SMART INVOICING</div>
+
+        </div>
+
+    </a>
+
+
+
+    <div class="nav-right">
+
+        <a href="{% url 'dashboard' %}" class="back-link">
+
+            <span>←</span>
+
+            <span class="back-text">Back to dashboard</span>
+
+        </a>
+
+        <div class="user-avatar">
+
+            {{ request.user.username|first|upper }}
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<main class="container">
+
+
+
+    <section class="heading">
+
+        <div>
+
+            <div class="eyebrow">Invoice workspace</div>
+
+            <h1>Choose your invoice design.</h1>
+
+            <p class="heading-description">
+
+                Make every invoice look professional. Choose a template that
+
+                matches your brand, then use the AI assistant to fill in
+
+                your invoice details.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="template-count">
+
+            <strong>04</strong> designs available
+
+        </div>
+
+    </section>
+
+
+
+    <section class="templates">
+
+
+
+        <!-- Template 1: Classic -->
+
+        <article class="card">
+
+            <div class="card-top">
+
+                <span class="template-label">Business essential</span>
+
+                <span class="template-tag">01 / 04</span>
+
+            </div>
+
+
+
+            <div class="preview classic">
+
+                <div class="preview-header">
+
+                    <div>
+
+                        <h3>INVOICE</h3>
+
+                        <p class="business">YOUR BUSINESS NAME</p>
+
+                        <p class="muted">Professional business services</p>
+
+                    </div>
+
+                    <div class="invoice-mark">01</div>
+
+                </div>
+
+
+
+                <div class="preview-meta">
+
+                    <div>
+
+                        <span class="meta-label">BILL TO</span>
+
+                        <span class="meta-value">Customer Name</span>
+
+                    </div>
+
+                    <div>
+
+                        <span class="meta-label">INVOICE NO.</span>
+
+                        <span class="meta-value">INV-0001</span>
+
+                    </div>
+
+                    <div>
+
+                        <span class="meta-label">DATE</span>
+
+                        <span class="meta-value">11 OCT 2026</span>
+
+                    </div>
+
+                </div>
+
+
+
+                <table>
+
+                    <thead>
+
+                    <tr><th>DESCRIPTION</th><th>QTY</th><th>AMOUNT</th></tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    <tr><td>Professional Service</td><td>1</td><td>₹25,000</td></tr>
+
+                    <tr><td>Additional Work</td><td>1</td><td>₹5,000</td></tr>
+
+                    </tbody>
+
+                </table>
+
+
+
+                <div class="preview-total">
+
+                    <span>Total Amount</span>
+
+                    <strong>₹30,000</strong>
+
+                </div>
+
+                <div class="preview-footer">Thank you for your business.</div>
+
+            </div>
+
+
+
+            <div class="card-info">
+
+                <h2><span class="number">01.</span> Classic Professional</h2>
+
+            </div>
+
+            <p class="description">
+
+                Timeless navy accents and a clean layout for everyday business
+
+                transactions.
+
+            </p>
+
+            <button class="use-button" onclick="chooseTemplate('template_1')">
+
+                Use this template <span class="arrow">→</span>
+
+            </button>
+
+        </article>
+
+
+
+        <!-- Template 2: Luxury -->
+
+        <article class="card">
+
+            <div class="card-top">
+
+                <span class="template-label">Premium collection</span>
+
+                <span class="template-tag">02 / 04</span>
+
+            </div>
+
+
+
+            <div class="preview luxury">
+
+                <div class="preview-header">
+
+                    <div style="width:100%">
+
+                        <h3>INVOICE</h3>
+
+                        <p class="business">YOUR BUSINESS</p>
+
+                        <p class="muted">An elevated client experience</p>
+
+                    </div>
+
+                    <div class="invoice-mark">02</div>
+
+                </div>
+
+
+
+                <div class="preview-meta">
+
+                    <div>
+
+                        <span class="meta-label">PREPARED FOR</span>
+
+                        <span class="meta-value">Customer Name</span>
+
+                    </div>
+
+                    <div>
+
+                        <span class="meta-label">INVOICE</span>
+
+                        <span class="meta-value">INV-0002</span>
+
+                    </div>
+
+                </div>
+
+
+
+                <table>
+
+                    <thead>
+
+                    <tr><th>DESCRIPTION</th><th>AMOUNT</th></tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    <tr><td>Premium Service</td><td>₹25,000</td></tr>
+
+                    <tr><td>Consultation</td><td>₹5,000</td></tr>
+
+                    </tbody>
+
+                </table>
+
+
+
+                <div class="preview-total">
+
+                    <span>GRAND TOTAL</span>
+
+                    <strong>₹30,000.00</strong>
+
+                </div>
+
+                <div class="preview-footer">With appreciation for your trust.</div>
+
+            </div>
+
+
+
+            <div class="card-info">
+
+                <h2><span class="number">02.</span> Luxury</h2>
+
+            </div>
+
+            <p class="description">
+
+                Elegant serif typography and refined gold details for premium
+
+                brands and high-value services.
+
+            </p>
+
+            <button class="use-button" onclick="chooseTemplate('template_2')">
+
+                Use this template <span class="arrow">→</span>
+
+            </button>
+
+        </article>
+
+
+
+        <!-- Template 3: Corporate -->
+
+        <article class="card">
+
+            <div class="card-top">
+
+                <span class="template-label">Enterprise ready</span>
+
+                <span class="template-tag">03 / 04</span>
+
+            </div>
+
+
+
+            <div class="preview corporate">
+
+                <div class="preview-header">
+
+                    <div>
+
+                        <h3>INVOICE / 2026</h3>
+
+                        <p class="business">BUSINESS SOLUTIONS</p>
+
+                        <p class="muted">Technology · Consulting · Services</p>
+
+                    </div>
+
+                    <div class="invoice-mark">03</div>
+
+                </div>
+
+
+
+                <div class="preview-meta">
+
+                    <div>
+
+                        <span class="meta-label">CUSTOMER</span>
+
+                        <span class="meta-value">Customer Name</span>
+
+                    </div>
+
+                    <div>
+
+                        <span class="meta-label">REFERENCE</span>
+
+                        <span class="meta-value">INV-0003</span>
+
+                    </div>
+
+                    <div>
+
+                        <span class="meta-label">STATUS</span>
+
+                        <span class="meta-value">ISSUED</span>
+
+                    </div>
+
+                </div>
+
+
+
+                <table>
+
+                    <thead>
+
+                    <tr><th>SERVICE</th><th>QTY</th><th>AMOUNT</th></tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    <tr><td>Development</td><td>1</td><td>₹25,000</td></tr>
+
+                    <tr><td>Integration</td><td>1</td><td>₹5,000</td></tr>
+
+                    </tbody>
+
+                </table>
+
+
+
+                <div class="preview-total">
+
+                    <span>GRAND TOTAL</span>
+
+                    <strong>₹30,000</strong>
+
+                </div>
+
+                <div class="preview-footer">Clear billing. Better business.</div>
+
+            </div>
+
+
+
+            <div class="card-info">
+
+                <h2><span class="number">03.</span> Modern Corporate</h2>
+
+            </div>
+
+            <p class="description">
+
+                Structured information, teal highlights, and clear totals
+
+                designed for growing companies.
+
+            </p>
+
+            <button class="use-button" onclick="chooseTemplate('template_3')">
+
+                Use this template <span class="arrow">→</span>
+
+            </button>
+
+        </article>
+
+
+
+        <!-- Template 4: Creative -->
+
+        <article class="card">
+
+            <div class="card-top">
+
+                <span class="template-label">Independent creators</span>
+
+                <span class="template-tag">04 / 04</span>
+
+            </div>
+
+
+
+            <div class="preview creative">
+
+                <div class="preview-header">
+
+                    <div>
+
+                        <h3>Let's make it official.</h3>
+
+                        <p class="business">CREATIVE STUDIO</p>
+
+                        <p class="muted">Ideas made into reality.</p>
+
+                    </div>
+
+                    <div class="invoice-mark">✳</div>
+
+                </div>
+
+
+
+                <div class="preview-meta">
+
+                    <div>
+
+                        <span class="meta-label">INVOICE FOR</span>
+
+                        <span class="meta-value">Customer Name</span>
+
+                    </div>
+
+                    <div>
+
+                        <span class="meta-label">INVOICE NO.</span>
+
+                        <span class="meta-value">INV-0004</span>
+
+                    </div>
+
+                </div>
+
+
+
+                <table>
+
+                    <thead>
+
+                    <tr><th>WHAT I DID</th><th>AMOUNT</th></tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    <tr><td>Creative Services</td><td>₹25,000</td></tr>
+
+                    <tr><td>Design & Strategy</td><td>₹5,000</td></tr>
+
+                    </tbody>
+
+                </table>
+
+
+
+                <div class="preview-total">
+
+                    <span>AMOUNT DUE</span>
+
+                    <strong>₹30,000</strong>
+
+                </div>
+
+                <div class="preview-footer">Thanks for making great things happen.</div>
+
+            </div>
+
+
+
+            <div class="card-info">
+
+                <h2><span class="number">04.</span> Creative Freelancer</h2>
+
+            </div>
+
+            <p class="description">
+
+                Expressive purple accents and contemporary styling for
+
+                freelancers, designers, and creative professionals.
+
+            </p>
+
+            <button class="use-button" onclick="chooseTemplate('template_4')">
+
+                Use this template <span class="arrow">→</span>
+
+            </button>
+
+        </article>
+
+
+
+    </section>
+
+
+
+    <div class="bottom-note">
+
+        <span>✓</span>
+
+        Choose a design first. Your AI-assisted invoice editor opens next.
+
+    </div>
+
+
+
+</main>
+
+
+
+<script>
+
+    function chooseTemplate(template) {
+
+        window.location.href =
+
+            "{% url 'create_invoice' %}?template=" +
+
+            encodeURIComponent(template);
+
+    }
+
+</script>
+
+
+
+</body>
+
+</html>

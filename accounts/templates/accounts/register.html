@@ -1,0 +1,312 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create Account | InvoiceAI</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: "DM Sans", sans-serif;
+            background: #f5f6fb;
+            color: #182033;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            height: 76px;
+            padding: 0 7%;
+            background: #111827;
+            display: flex;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 13px;
+            background: linear-gradient(135deg, #8178ff, #4f46e5);
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .brand-name {
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .brand-subtitle {
+            margin-top: 4px;
+            color: #9ca7ba;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+        }
+
+        main {
+            flex: 1;
+            display: grid;
+            place-items: center;
+            padding: 40px 18px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 460px;
+            padding: 38px;
+            background: white;
+            border: 1px solid #e7eaf1;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px #141f3a0b;
+        }
+
+        .icon {
+            width: 54px;
+            height: 54px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 24px;
+            border-radius: 16px;
+            background: #eeedff;
+            color: #5145e5;
+            font-size: 25px;
+        }
+
+        h1 {
+            font-size: 27px;
+            letter-spacing: -1px;
+            margin-bottom: 9px;
+        }
+
+        .subtitle {
+            margin-bottom: 26px;
+            color: #788398;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        .field {
+            margin-bottom: 19px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #dce1eb;
+            border-radius: 10px;
+            outline: none;
+            font: inherit;
+            font-size: 13px;
+            transition: .2s;
+        }
+
+        input:focus {
+            border-color: #8178ff;
+            box-shadow: 0 0 0 4px #5145e51a;
+        }
+
+        .help {
+            margin-top: 7px;
+            color: #8993a6;
+            font-size: 10px;
+            line-height: 1.7;
+        }
+
+        .errors {
+            margin-top: 7px;
+            color: #dc2626;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .errors ul {
+            padding-left: 17px;
+        }
+
+        .alert {
+            padding: 12px;
+            margin-bottom: 18px;
+            border: 1px solid #fecdd3;
+            border-radius: 9px;
+            background: #fff1f2;
+            color: #be123c;
+            font-size: 12px;
+        }
+
+        .submit {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: #5145e5;
+            color: white;
+            font: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .submit:hover {
+            background: #4035c8;
+            transform: translateY(-1px);
+        }
+
+        .login-link {
+            margin-top: 23px;
+            text-align: center;
+            color: #788398;
+            font-size: 12px;
+        }
+
+        .login-link a {
+            color: #5145e5;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .footer {
+            padding: 20px;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 11px;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 25px;
+            }
+
+            .navbar {
+                padding: 0 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="navbar">
+        <a href="{% url 'login' %}" class="brand">
+            <div class="brand-icon">I</div>
+            <div>
+                <div class="brand-name">InvoiceAI</div>
+                <div class="brand-subtitle">SMART INVOICING</div>
+            </div>
+        </a>
+    </header>
+
+    <main>
+        <section class="card">
+            <div class="icon">✦</div>
+
+            <h1>Create your account</h1>
+            <p class="subtitle">
+                Join InvoiceAI and start creating professional invoices
+                with the help of AI.
+            </p>
+
+            {% if form.non_field_errors %}
+                <div class="alert">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="field">
+                    <label for="{{ form.username.id_for_label }}">Username</label>
+                    <input
+                        type="text"
+                        name="{{ form.username.html_name }}"
+                        id="{{ form.username.id_for_label }}"
+                        value="{{ form.username.value|default_if_none:'' }}"
+                        placeholder="Choose a username"
+                        autocomplete="username"
+                        required
+                        autofocus
+                    >
+                    {% if form.username.help_text %}
+                        <div class="help">{{ form.username.help_text|safe }}</div>
+                    {% endif %}
+                    {% if form.username.errors %}
+                        <div class="errors">{{ form.username.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="field">
+                    <label for="{{ form.password1.id_for_label }}">Password</label>
+                    <input
+                        type="password"
+                        name="{{ form.password1.html_name }}"
+                        id="{{ form.password1.id_for_label }}"
+                        placeholder="Create a strong password"
+                        autocomplete="new-password"
+                        required
+                    >
+                    {% if form.password1.help_text %}
+                        <div class="help">{{ form.password1.help_text|safe }}</div>
+                    {% endif %}
+                    {% if form.password1.errors %}
+                        <div class="errors">{{ form.password1.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="field">
+                    <label for="{{ form.password2.id_for_label }}">Confirm password</label>
+                    <input
+                        type="password"
+                        name="{{ form.password2.html_name }}"
+                        id="{{ form.password2.id_for_label }}"
+                        placeholder="Enter your password again"
+                        autocomplete="new-password"
+                        required
+                    >
+                    {% if form.password2.errors %}
+                        <div class="errors">{{ form.password2.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <button class="submit" type="submit">
+                    Create Account &nbsp; →
+                </button>
+            </form>
+
+            <div class="login-link">
+                Already have an account?
+                <a href="{% url 'login' %}">Sign in</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        © 2026 InvoiceAI · Smart invoicing, made simple.
+    </footer>
+</body>
+</html>
