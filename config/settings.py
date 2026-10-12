@@ -22,20 +22,18 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = os.environ.get("DEBUG", "True").lower() == "true"
 
+# Hosts allowed to access this Django application
 ALLOWED_HOSTS = [
-    host.strip()
-    for host in os.environ.get(
-        "ALLOWED_HOSTS", "127.0.0.1,localhost"
-    ).split(",")
-    if host.strip()
+    "localhost",
+    "127.0.0.1",
+    "invoice-1dg8.onrender.com",
+    "invoice.jeyabalaganesh.site",
 ]
 
+# Trusted origins for Django CSRF protection
 CSRF_TRUSTED_ORIGINS = [
-    origin.strip()
-    for origin in os.environ.get(
-        "CSRF_TRUSTED_ORIGINS", ""
-    ).split(",")
-    if origin.strip()
+    "https://invoice-1dg8.onrender.com",
+    "https://invoice.jeyabalaganesh.site",
 ]
 
 LOGIN_URL = "/accounts/login/"
@@ -85,7 +83,7 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 # Database:
-# SQLite locally; PostgreSQL when DATABASE_URL is provided.
+# SQLite locally; PostgreSQL on Render when DATABASE_URL is set.
 DATABASES = {
     "default": dj_database_url.config(
         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
@@ -106,6 +104,12 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": (
             "django.contrib.auth.password_validation."
             "MinimumLengthValidator"
+        ),
+    },
+    {
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "CommonPasswordValidator"
         ),
     },
     {
@@ -145,15 +149,17 @@ STORAGES = {
 }
 
 # Email
-# Preserve your current console email behavior.
 EMAIL_BACKEND = (
     "django.core.mail.backends.console.EmailBackend"
 )
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Production HTTPS-related settings
+# Production HTTPS settings
 if not DEBUG:
-    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SECURE_PROXY_SSL_HEADER = (
+        "HTTP_X_FORWARDED_PROTO",
+        "https",
+    )
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
