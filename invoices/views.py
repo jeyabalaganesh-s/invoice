@@ -400,6 +400,7 @@ def invoice_pdf(request, invoice_id):
 
     from django.http import HttpResponse
     from django.shortcuts import get_object_or_404
+
     from reportlab.lib import colors
     from reportlab.lib.enums import TA_CENTER, TA_RIGHT
     from reportlab.lib.pagesizes import A4
@@ -463,7 +464,6 @@ def invoice_pdf(request, invoice_id):
         template_key = "template_1"
 
     design = designs[template_key]
-
     primary = colors.HexColor(design["primary"])
     accent = colors.HexColor(design["accent"])
     light = colors.HexColor(design["light"])
@@ -537,7 +537,6 @@ def invoice_pdf(request, invoice_id):
 
     # --------------------------------------------------
     # TEMPLATE 1: CLASSIC PROFESSIONAL
-    # Traditional navy header with two columns.
     # --------------------------------------------------
     if template_key == "template_1":
         classic_seller = ParagraphStyle(
@@ -553,16 +552,13 @@ def invoice_pdf(request, invoice_id):
                 [
                     Paragraph("INVOICE", title),
                     Paragraph(
-                        f"<b>No.</b> {safe(invoice.invoice_number)}",
-                        body,
+                        f"<b>No.</b> {safe(invoice.invoice_number)}", body
                     ),
                     Paragraph(
-                        f"<b>Date:</b> {safe(invoice.invoice_date)}",
-                        body,
+                        f"<b>Date:</b> {safe(invoice.invoice_date)}", body
                     ),
                     Paragraph(
-                        f"<b>Due:</b> {safe(invoice.due_date)}",
-                        small,
+                        f"<b>Due:</b> {safe(invoice.due_date)}", small
                     ),
                 ],
                 [
@@ -591,7 +587,6 @@ def invoice_pdf(request, invoice_id):
 
     # --------------------------------------------------
     # TEMPLATE 2: LUXURY
-    # Centered serif title, gold divider and metadata.
     # --------------------------------------------------
     elif template_key == "template_2":
         centered_title = ParagraphStyle(
@@ -621,8 +616,7 @@ def invoice_pdf(request, invoice_id):
 
         story.append(Paragraph("INVOICE", centered_title))
         story.append(Paragraph(
-            f"<b>{safe(invoice.seller_name)}</b>",
-            luxury_seller,
+            f"<b>{safe(invoice.seller_name)}</b>", luxury_seller
         ))
         story.append(Paragraph(safe(invoice.seller_address), centered))
         story.append(Paragraph(
@@ -677,7 +671,6 @@ def invoice_pdf(request, invoice_id):
 
     # --------------------------------------------------
     # TEMPLATE 3: MODERN CORPORATE
-    # Full teal banner with seller and invoice information.
     # --------------------------------------------------
     elif template_key == "template_3":
         seller_style = ParagraphStyle(
@@ -751,7 +744,6 @@ def invoice_pdf(request, invoice_id):
 
     # --------------------------------------------------
     # TEMPLATE 4: CREATIVE FREELANCER
-    # Split purple panels with bold invoice branding.
     # --------------------------------------------------
     else:
         creative_title = ParagraphStyle(
@@ -836,15 +828,17 @@ def invoice_pdf(request, invoice_id):
         section,
     ))
 
+    customer_name_style = ParagraphStyle(
+        f"CustomerName_{template_key}",
+        parent=body,
+        fontSize=11,
+        textColor=primary,
+    )
+
     customer_details = [
         Paragraph(
             f"<b>{safe(invoice.customer_name)}</b>",
-            ParagraphStyle(
-                f"CustomerName_{template_key}",
-                parent=body,
-                fontSize=11,
-                textColor=primary,
-            ),
+            customer_name_style,
         ),
         Paragraph(safe(invoice.customer_address), small),
     ]
@@ -972,7 +966,8 @@ def invoice_pdf(request, invoice_id):
     elif template_key == "template_2":
         table_style = [
             ("BACKGROUND", (0, 0), (-1, 0), primary),
-            ("TEXTCOLOR", (0, 0), (-1, 0), colors.HexColor("#F7EDDA")),
+            ("TEXTCOLOR", (0, 0), (-1, 0),
+             colors.HexColor("#F7EDDA")),
             ("LINEBELOW", (0, 0), (-1, 0), 1.2, accent),
             ("LINEBELOW", (0, 1), (-1, -1), 0.5, border),
         ]
@@ -996,7 +991,8 @@ def invoice_pdf(request, invoice_id):
 
     items_table.setStyle(TableStyle(
         table_style + [
-            ("TEXTCOLOR", (0, 1), (-1, -1), colors.HexColor("#374151")),
+            ("TEXTCOLOR", (0, 1), (-1, -1),
+             colors.HexColor("#374151")),
             ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
             ("ALIGN", (1, 1), (-1, -1), "RIGHT"),
             ("LEFTPADDING", (0, 0), (-1, -1), 6),
@@ -1015,7 +1011,6 @@ def invoice_pdf(request, invoice_id):
     discount = Decimal(str(invoice.discount or 0))
     taxable_amount = max(Decimal("0"), subtotal - discount)
 
-    # Reduce tax proportionally when a discount is applied.
     if subtotal > 0 and discount > 0:
         ratio = taxable_amount / subtotal
         total_tax *= ratio
@@ -1041,6 +1036,7 @@ def invoice_pdf(request, invoice_id):
 
     totals_rows.append(["GRAND TOTAL", money(grand_total)])
 
+    
     totals_table = Table(
         [[
             Paragraph(
@@ -1054,27 +1050,18 @@ def invoice_pdf(request, invoice_id):
                 body,
             ),
         ] for label, value in totals_rows],
-        colWidths=[page_width * 0.55, page_width * 0.45],
+        colWidths=[
+            page_width * 0.275,
+            page_width * 0.225,
+        ],
         hAlign="RIGHT",
     )
 
-    if template_key == "template_1":
-        totals_bg = light
-        totals_text = primary
-    elif template_key == "template_2":
-        totals_bg = light
-        totals_text = primary
-    elif template_key == "template_3":
-        totals_bg = light
-        totals_text = primary
-    else:
-        totals_bg = light
-        totals_text = primary
 
     totals_table.setStyle(TableStyle([
         ("ALIGN", (1, 0), (1, -1), "RIGHT"),
-        ("BACKGROUND", (0, -1), (-1, -1), totals_bg),
-        ("TEXTCOLOR", (0, -1), (-1, -1), totals_text),
+        ("BACKGROUND", (0, -1), (-1, -1), light),
+        ("TEXTCOLOR", (0, -1), (-1, -1), primary),
         ("LINEABOVE", (0, -1), (-1, -1), 1.5, accent),
         ("BOX", (0, -1), (-1, -1), 0.8, border),
         ("LEFTPADDING", (0, 0), (-1, -1), 9),
@@ -1095,10 +1082,33 @@ def invoice_pdf(request, invoice_id):
             small,
         ))
 
+    # UPDATED: Notes/payment terms use half the available page width.
     if invoice.notes:
         story.append(Spacer(1, 5 * mm))
-        story.append(Paragraph("NOTES / PAYMENT TERMS", section))
-        story.append(Paragraph(safe(invoice.notes), body))
+
+        notes_content = [
+            Paragraph("NOTES / PAYMENT TERMS", section),
+            Paragraph(safe(invoice.notes), body),
+        ]
+
+        notes_table = Table(
+            [[notes_content, ""]],
+            colWidths=[
+                page_width * 0.5,
+                page_width * 0.5,
+            ],
+            hAlign="LEFT",
+        )
+
+        notes_table.setStyle(TableStyle([
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+            ("TOPPADDING", (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+        ]))
+
+        story.append(notes_table)
 
     story.append(Spacer(1, 12 * mm))
 
@@ -1130,17 +1140,15 @@ def invoice_pdf(request, invoice_id):
         ("LINEABOVE", (0, 0), (-1, -1), 1, accent),
         ("TOPPADDING", (0, 0), (-1, -1), 9),
         ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
-        ("BACKGROUND", (0, 0), (-1, -1), light
-         if template_key in ("template_3", "template_4")
+        ("BACKGROUND", (0, 0), (-1, -1),
+         light if template_key in ("template_3", "template_4")
          else colors.white),
     ]))
 
     story.append(footer)
 
     pdf.build(story)
-    return response
-
-
+    return response 
 
 
 def normalize_mobile(value):

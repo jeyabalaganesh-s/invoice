@@ -83,18 +83,47 @@ button,.button{border:0;border-radius:9px;padding:11px 14px;background:var(--bra
 .invoice-paper[data-template="template_1"] .invoice-table th{background:var(--layout-soft);color:#697386}
 
 /* Luxury: centered editorial layout with gold details */
-.invoice-paper[data-template="template_2"]{--layout-accent:#b08d57;--layout-soft:#fbf7ef;--layout-line:#e9dcc5;font-family:Georgia,"Times New Roman",serif}
-.invoice-paper[data-template="template_2"] .invoice-top{display:block;text-align:center;border-bottom:1px solid var(--layout-accent);padding:12px 0 28px;margin-bottom:30px}
-.invoice-paper[data-template="template_2"] .seller-block{width:100%;max-width:none}
-.invoice-paper[data-template="template_2"] .invoice-number-block{text-align:center;margin-top:25px}
-.invoice-paper[data-template="template_2"] .invoice-title{font-size:44px;letter-spacing:5px;color:#8c6b3d}
-.invoice-paper[data-template="template_2"] .eyebrow,.invoice-paper[data-template="template_2"] .paper-section-title{color:#9b7847}
-.invoice-paper[data-template="template_2"] .party-box{border:1px solid #e9dcc5;border-radius:0;background:#fffdf9}
-.invoice-paper[data-template="template_2"] .invoice-table th{background:#2d2924;color:#f7edda;border-bottom:0}
-.invoice-paper[data-template="template_2"] .invoice-table td{border-bottom:1px solid #eee4d4}
-.invoice-paper[data-template="template_2"] .total-row.grand{background:#f6efe2;color:#795a2f;border:1px solid #e5d4b7;border-radius:0}
-.invoice-paper[data-template="template_2"] .total-row.grand strong{color:#795a2f}
-.invoice-paper[data-template="template_2"] .paper-footer{border-top:1px solid #c9ad7c;font-family:Georgia,serif;font-style:italic}
+
+.invoice-paper[data-template="template_2"] .invoice-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-bottom: 1px solid var(--layout-accent);
+    padding: 12px 0 28px;
+    margin-bottom: 30px;
+}
+
+/* Invoice title appears at the top */
+.invoice-paper[data-template="template_2"] .invoice-number-block {
+    order: 1;
+    width: 100%;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+/* Seller details appear below the title */
+.invoice-paper[data-template="template_2"] .seller-block {
+    order: 2;
+    width: 100%;
+    max-width: none;
+    text-align: center;
+}
+
+/* Center the title and seller text */
+.invoice-paper[data-template="template_2"] .invoice-title {
+    font-size: 44px;
+    letter-spacing: 5px;
+    color: #8c6b3d;
+    text-align: center;
+}
+
+.invoice-paper[data-template="template_2"] .seller-block input,
+.invoice-paper[data-template="template_2"] .seller-block textarea,
+.invoice-paper[data-template="template_2"] .invoice-number-block input {
+    text-align: center;
+}
 
 
 /* =========================================
