@@ -799,92 +799,48 @@ function addMessage(text, sender = "ai") {
 
 }
 
-
-
-
-
-
-
 function setField(name, value) {
 
-
-
-    if (value === null || value === undefined || value === "") return;
-
-
-
-
-
-
+    if (value === null || value === undefined || value === "") {
+        return;
+    }
 
     const field = document.getElementById("id_" + name);
 
-
-
-    if (!field) return;
-
-
-
-
-
-
+    if (!field) {
+        return;
+    }
 
     field.value = value;
 
+    // Notify the rest of the UI.
+    field.dispatchEvent(
+        new Event("input", { bubbles: true })
+    );
 
+    field.dispatchEvent(
+        new Event("change", { bubbles: true })
+    );
 
-    field.dispatchEvent(new Event("input", { bubbles: true }));
-
-
-
-    field.dispatchEvent(new Event("change", { bubbles: true }));
-
-
-
+    // Recalculate immediately for fields that affect totals.
+    if (
+        name === "discount" ||
+        name === "quantity" ||
+        name === "unit_price" ||
+        name === "tax_rate"
+    ) {
+        updateLiveTotals();
+    }
 }
-
-
-
-
-
-
 
 function addItemRow() {
 
-
-
     const index = Number(totalForms.value);
-
-
-
     const template = document.getElementById("empty-item-template");
-
-
-
-
-
-
-
     const html = template.innerHTML.replaceAll("__prefix__", index);
-
-
-
     itemsContainer.insertAdjacentHTML("beforeend", html);
-
-
-
-
-
-
-
     totalForms.value = index + 1;
-
-
-
     return index;
-
-
-
 }
 
 
@@ -960,16 +916,11 @@ function fillInvoice(data) {
 
     const items = Array.isArray(data.items) ? data.items : [];
 
-    // Keep the rest of your existing item-population code here.
-
     items.forEach((item, index) => {
 
-        // Reuse the initial row and add rows if the AI returns more items.
-
+        // Add new rows if AI returned more items.
         while (index >= Number(totalForms.value)) {
-
             addItemRow();
-
         }
 
         [
@@ -979,31 +930,36 @@ function fillInvoice(data) {
             "tax_rate"
         ].forEach(name => {
 
-            const field = document.getElementById(`id_items-${index}-${name}`);
+            const field = document.getElementById(
+                `id_items-${index}-${name}`
+            );
 
             if (
-
                 field &&
-
                 item[name] !== null &&
-
                 item[name] !== undefined &&
-
                 item[name] !== ""
-
             ) {
 
                 field.value = item[name];
 
+                // Trigger both events.
                 field.dispatchEvent(
+                    new Event("input", { bubbles: true })
+                );
 
+                field.dispatchEvent(
                     new Event("change", { bubbles: true })
-
                 );
             }
         });
     });
+
+    // IMPORTANT:
+    // Recalculate totals after AI has finished filling everything.
+    updateLiveTotals();
 }
+
 
 async function sendMessage() {
 
